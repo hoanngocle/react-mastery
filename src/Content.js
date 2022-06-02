@@ -38,28 +38,47 @@ const Content = () => {
 
   const handleCheck = id => {
     const listItems = items.map(item =>
-      item.id === id ? { ...item, checked: !item.checked, title: 'tét' } : item
+      item.id === id ? { ...item, checked: !item.checked } : item
     );
 
     setItems(listItems);
-    console.log(listItems);
+    localStorage.setItem('shopping list', JSON.stringify(listItems));
+  };
+
+  const handleDelete = id => {
+    const listItems = items.filter(item => item.id !== id);
+    setItems(listItems);
+    localStorage.setItem('shopping list', JSON.stringify(listItems));
   };
 
   return (
     <main>
-      <ul>
-        {items.map(item => (
-          <li className='item' key={item.id}>
-            <input
-              type='checkbox'
-              onChange={() => handleCheck(item.id)}
-              checked={item.checked}
-            />
-            <label htmlFor=''>{item.title}</label>
-            <FaTrashAlt role='button' tabIndex='0'></FaTrashAlt>
-          </li>
-        ))}
-      </ul>
+      {items.length ? (
+        <ul>
+          {items.map(item => (
+            <li className='item' key={item.id}>
+              <input
+                type='checkbox'
+                onChange={() => handleCheck(item.id)}
+                checked={item.checked}
+              />
+              <label
+                style={item.checked ? { textDecoration: 'line-through' } : null}
+                onDoubleClick={() => handleCheck(item.id)}
+              >
+                {item.title}
+              </label>
+              <FaTrashAlt
+                role='button'
+                tabIndex='0'
+                onClick={() => handleDelete(item.id)}
+              ></FaTrashAlt>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p style={{ marginTop: '2rem' }}>Your list is empty</p>
+      )}
     </main>
   );
 };
