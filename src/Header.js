@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header = () => {
+const Header = ({ title }) => {
   const headerStyle = {
     backgroundColor: 'royalblue',
     color: '#fff'
@@ -8,9 +8,13 @@ const Header = () => {
 
   return (
     <header style={headerStyle}>
-      <h1>Love With Passion</h1>
+      <h1>{title}</h1>
     </header>
   );
+};
+
+Header.defaultProps = {
+  title: 'Vivian Love'
 };
 
 export default Header;
