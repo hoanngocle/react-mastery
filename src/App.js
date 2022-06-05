@@ -1,62 +1,61 @@
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
+import AddItem from './AddItem';
+import SearchItem from './SearchItem';
 import { useState } from 'react';
 
 function App() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      title: 'sunt aut facere repellat provident occaec',
-      body: 'quia et suscipit\nsuscipit ',
-      checked: false
-    },
-    {
-      id: 2,
-      title: 'qui est esse',
-      body: 'est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla',
-      checked: false
-    },
-    {
-      id: 3,
-      title: 'ea molestias quasi exercitationem repellat qui ipsa sit aut',
-      body: 'et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut',
-      checked: true
-    },
-    {
-      id: 4,
-      title: 'eum et est occaecati',
-      body: 'ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit',
-      checked: true
-    },
-    {
-      id: 5,
-      title: 'nesciunt quas odio',
-      body: 'repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque',
-      checked: true
-    }
-  ]);
+  const [items, setItems] = useState(JSON.parse(localStorage.getItem('cart')));
+  const [newItem, setNewItem] = useState('');
+  const [search, setSearch] = useState('');
+
+  const setAndSaveItem = newItems => {
+    setItems(newItems);
+    localStorage.setItem('cart', JSON.stringify(newItems));
+  };
+
+  const addItem = item => {
+    const id = items.length ? items[items.length - 1].id + 1 : 1;
+    const myNewItem = { id, title: item, checked: false };
+    const listItems = [...items, myNewItem];
+    setAndSaveItem(listItems);
+  };
 
   const handleCheck = id => {
     const listItems = items.map(item =>
       item.id === id ? { ...item, checked: !item.checked } : item
     );
-
-    setItems(listItems);
-    localStorage.setItem('shopping list', JSON.stringify(listItems));
+    setAndSaveItem(listItems);
   };
 
   const handleDelete = id => {
     const listItems = items.filter(item => item.id !== id);
-    setItems(listItems);
-    localStorage.setItem('shopping list', JSON.stringify(listItems));
+    setAndSaveItem(listItems);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!newItem) return;
+
+    addItem(newItem);
+    setNewItem('');
   };
 
   return (
     <div className='App'>
       <Header />
+      <AddItem
+        newItem={newItem}
+        setNewItem={setNewItem}
+        handleSubmit={handleSubmit}
+      />
+      <SearchItem search={search} setSearch={setSearch} />
+
       <Content
-        items={items}
+        items={items.filter(item =>
+          item.title.toLowerCase().includes(search.toLowerCase())
+        )}
         handleCheck={handleCheck}
         handleDelete={handleDelete}
       />
