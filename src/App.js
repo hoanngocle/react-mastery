@@ -7,37 +7,32 @@ import { useEffect, useState } from 'react';
 
 function App() {
     const [items, setItems] = useState(
-        JSON.parse(localStorage.getItem('cart'))
+        JSON.parse(localStorage.getItem('cart')) || []
     );
     const [newItem, setNewItem] = useState('');
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        console.log('Updating item state');
+        localStorage.setItem('cart', JSON.stringify(items));
     }, [items]);
-
-    const setAndSaveItem = newItems => {
-        setItems(newItems);
-        localStorage.setItem('cart', JSON.stringify(newItems));
-    };
 
     const addItem = item => {
         const id = items.length ? items[items.length - 1].id + 1 : 1;
         const myNewItem = { id, title: item, checked: false };
         const listItems = [...items, myNewItem];
-        setAndSaveItem(listItems);
+        setItems(listItems);
     };
 
     const handleCheck = id => {
         const listItems = items.map(item =>
             item.id === id ? { ...item, checked: !item.checked } : item
         );
-        setAndSaveItem(listItems);
+        setItems(listItems);
     };
 
     const handleDelete = id => {
         const listItems = items.filter(item => item.id !== id);
-        setAndSaveItem(listItems);
+        setItems(listItems);
     };
 
     const handleSubmit = e => {
