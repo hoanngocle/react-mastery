@@ -1,0 +1,29 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "item": "Vivian",
+            "checked": false
+        },
+        {
+            "id": 2,
+            "item": "Emilia",
+            "checked": true
+        },
+        {
+            "id": 3,
+            "item": "Ikaros",
+            "checked": false
+        },
+        {
+            "id": 4,
+            "item": "Frozen",
+            "checked": true
+        },
+        {
+            "id": 5,
+            "item": "Love",
+            "checked": true
+        }
+    ]
+}
