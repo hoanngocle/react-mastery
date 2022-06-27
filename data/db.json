@@ -3,26 +3,31 @@
         {
             "id": 1,
             "item": "Vivian",
+            "title": "I don't want to be a star - most of the ones I know are too unhappy",
             "checked": false
         },
         {
             "id": 2,
             "item": "Emilia",
+            "title": "You have little cause to say so",
             "checked": true
         },
         {
             "id": 3,
             "item": "Ikaros",
+            "title": "Let us see how high we can fly",
             "checked": false
         },
         {
             "id": 4,
-            "item": "Frozen",
+            "item": "Megumin",
+            "title": "The queen is back soon",
             "checked": true
         },
         {
             "id": 5,
-            "item": "Love",
+            "item": "Rem",
+            "title": "When we walk together, I love the way you occasionally turn",
             "checked": true
         }
     ]

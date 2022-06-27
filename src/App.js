@@ -6,15 +6,35 @@ import SearchItem from './SearchItem';
 import { useEffect, useState } from 'react';
 
 function App() {
-    const [items, setItems] = useState(
-        JSON.parse(localStorage.getItem('cart')) || []
-    );
+    const API_URL = 'http://localhost:3500/itemss';
+    const [items, setItems] = useState([]);
     const [newItem, setNewItem] = useState('');
     const [search, setSearch] = useState('');
+    const [fetchError, setFetchError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(items));
-    }, [items]);
+        const fetchItems = async () => {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw Error('Did not receive expected data');
+                }
+                const listItems = await response.json();
+                console.log(listItems);
+                setItems(listItems);
+                setFetchError(null);
+            } catch (e) {
+                setFetchError(e.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        setTimeout(() => {
+            (async () => await fetchItems())();
+        }, 2000);
+    }, []);
 
     const addItem = item => {
         const id = items.length ? items[items.length - 1].id + 1 : 1;
@@ -52,14 +72,23 @@ function App() {
                 handleSubmit={handleSubmit}
             />
             <SearchItem search={search} setSearch={setSearch} />
-
-            <Content
-                items={items.filter(item =>
-                    item.title.toLowerCase().includes(search.toLowerCase())
+            <main>
+                {isLoading && <p>Loading Item...</p>}
+                {fetchError && (
+                    <p style={{ color: 'red' }}>{`Error: ${fetchError}`}</p>
                 )}
-                handleCheck={handleCheck}
-                handleDelete={handleDelete}
-            />
+                {!fetchError && !isLoading && (
+                    <Content
+                        items={items.filter(item =>
+                            item.title
+                                .toLowerCase()
+                                .includes(search.toLowerCase())
+                        )}
+                        handleCheck={handleCheck}
+                        handleDelete={handleDelete}
+                    />
+                )}
+            </main>
             <Footer length={items.length} />
         </div>
     );
