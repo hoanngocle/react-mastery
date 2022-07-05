@@ -46,9 +46,9 @@ function App() {
         const postOptions = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(myNewItem)
+            body: JSON.stringify(myNewItem),
         };
 
         const result = await apiRequest(API_URL, postOptions);
